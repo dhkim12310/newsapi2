@@ -1,7 +1,7 @@
 from datetime               import datetime
 from django.utils.timesince import timesince
 from rest_framework         import serializers
-from news.api.models        import Article
+from news.api.models        import Article,Journalist
 
 class ArticleSerializer(serializers.ModelSerializer):
 
@@ -41,3 +41,12 @@ class ArticleSerializer(serializers.ModelSerializer):
         if len(value) > 60:
             raise serializers.ValidationError("The title has to be at least 60 chars long!")
         return value 
+
+class JournalistSerializer(serializers.ModelSerializer):
+    articles = serializers.HyperlinkedRelatedField(many=True,
+                                                   read_only=True,
+                                                   view_name="article-detail")
+
+    class Meta:
+        model = Journalist
+        fields = "__all__"
