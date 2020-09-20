@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls    import path
 from news.api.views import (ArticleListCreateAPIView,
                             ArticleDetailAPIView,
                             JournalistCreateAPIView)

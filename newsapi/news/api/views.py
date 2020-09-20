@@ -8,7 +8,7 @@ from news.api.serializers      import ArticleSerializer, JournalistSerializer
 
 class ArticleListCreateAPIView(APIView):
     def get(self,request):
-        articles = Article.objects.filter(active=True)
+        articles   = Article.objects.filter(active=True)
         serializer = ArticleSerializer(articles, many=True)
         return Response(serializer.data)
 
@@ -25,12 +25,12 @@ class ArticleDetailAPIView(APIView):
         return article
 
     def get(self,request,pk):
-        article = self.get_object(pk)
+        article    = self.get_object(pk)
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
     
     def put(self,request,pk):
-        article = self.get_object(pk)
+        article    = self.get_object(pk)
         serializer = ArticleSerializer(article,data = request.data)
         if serializer.is_valid():
             serializer.save()

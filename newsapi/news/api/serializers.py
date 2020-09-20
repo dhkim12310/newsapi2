@@ -6,29 +6,29 @@ from news.api.models        import Article,Journalist
 class ArticleSerializer(serializers.ModelSerializer):
 
     time_since_publication = serializers.SerializerMethodField()
-    author = serializers.StringRelatedField()
+    author                 = serializers.StringRelatedField()
 
     class Meta:
-        model = Article
+        model   = Article
         exclude = ("id",)
 
     def get_time_since_publication(self,object):
         publication_date = object.publication_date
-        now = datetime.now()
-        time_delta = timesince(publication_date,now)
+        now              = datetime.now()
+        time_delta       = timesince(publication_date,now)
         return time_delta
 
     def create(self,validated_data):
         return Article.objects.create(**validated_data)
 
     def update(self,instance,validated_data):
-        instance.author = validated_data.get('author',instance.author)
-        instance.title = validated_data.get('title',instance.title)
-        instance.description = validated_data.get('description',instance.description)
-        instance.body = validated_data.get('body',instance.body)
-        instance.location = validated_data.get('location',instance.location)
+        instance.author           = validated_data.get('author',instance.author)
+        instance.title            = validated_data.get('title',instance.title)
+        instance.description      = validated_data.get('description',instance.description)
+        instance.body             = validated_data.get('body',instance.body)
+        instance.location         = validated_data.get('location',instance.location)
         instance.publication_data = validated_data.get('publication_data',instance.publication_data)
-        instance.active = validated_data.get('active',instance.active)
+        instance.active           = validated_data.get('active',instance.active)
         instance.save()
         return instance
 
@@ -48,5 +48,5 @@ class JournalistSerializer(serializers.ModelSerializer):
                                                    view_name="article-detail")
 
     class Meta:
-        model = Journalist
+        model  = Journalist
         fields = "__all__"
