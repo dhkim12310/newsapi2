@@ -6,6 +6,7 @@ from news.api.models        import Article
 class ArticleSerializer(serializers.ModelSerializer):
 
     time_since_publication = serializers.SerializerMethodField()
+    author = serializers.StringRelatedField()
 
     class Meta:
         model = Article
