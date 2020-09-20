@@ -6,7 +6,7 @@ class Article(models.Model):
     description = models.CharField(max_length=250)
     body = models.TextField()
     location = models.CharField(max_length=120)
-    publication_data = models.DateField()
+    publication_date = models.DateField()
     active = models.BooleanField(default=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)

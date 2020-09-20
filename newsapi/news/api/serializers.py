@@ -1,20 +1,24 @@
-from rest_framework import serializers
-from news.api.models import Article
+from datetime               import datetime
+from django.utils.timesince import timesince
+from rest_framework         import serializers
+from news.api.models        import Article
 
-class ArticleSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    author = serializers.CharField()
-    title = serializers.CharField()
-    description = serializers.CharField()
-    body = serializers.CharField()
-    location = serializers.CharField()
-    publication_data = serializers.DateField()
-    active = serializers.BooleanField()
-    create_at = serializers.DateTimeField(read_only=True)
-    update_at = serializers.DateTimeField(read_only=True)
+class ArticleSerializer(serializers.ModelSerializer):
+
+    time_since_publication = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Article
+        exclude = ("id",)
+
+    def get_time_since_publication(self,object):
+        publication_date = object.publication_date
+        now = datetime.now()
+        time_delta = timesince(publication_date,now)
+        return time_delta
 
     def create(self,validated_data):
-        Article.objects.create(**validated_data)
+        return Article.objects.create(**validated_data)
 
     def update(self,instance,validated_data):
         instance.author = validated_data.get('author',instance.author)
@@ -33,6 +37,6 @@ class ArticleSerializer(serializers.Serializer):
         return data
     
     def validate_title(self,value): 
-        if len(value) < 60:
+        if len(value) > 60:
             raise serializers.ValidationError("The title has to be at least 60 chars long!")
         return value 
